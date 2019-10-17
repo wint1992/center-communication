@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+
+group 'ru.x5.bd'
+//version '1'       
+
+sourceCompatibility = 11
+targetCompatibility = 11
+mainClassName = 'ru.x5.bd.center.communication.Application'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation('org.springframework.kafka:spring-kafka')
+    compile project(':base-web')
+    compile project(':center-communication-emailsender')
+    compile project(':center-communication-core')
+}

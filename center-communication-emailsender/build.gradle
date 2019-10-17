@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.x5.bd'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile project(':base-web')
+    compile project(':center-communication-core')
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.1.6.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker:2.1.6.RELEASE'
+    implementation 'org.springframework.data:spring-data-jpa:2.1.9.RELEASE'
+    implementation 'org.postgresql:postgresql:42.2.6'
+    compile 'javax.persistence:javax.persistence-api:2.2'
+}
