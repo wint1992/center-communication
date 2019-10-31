@@ -30,26 +30,26 @@ public class KafkaConsumer {
         this.TO_EVENT_TOPIC = TO_EVENT_TOPIC;
     }
 
-    @KafkaListener(id = "KafkaCommunicationListener", topics = "${app.topic.request}", containerFactory = "kafkaListenerContainerFactory")
-    public void listen(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key, @Payload String data) {
-        try {
-            LOGGER.info("key = {}; msg = {}", key, data);
-            String replData = data
-                    .replace("\"{", "{")
-                    .replace("}\"", "}")
-                    .replace("\"[", "[")
-                    .replace("]\"", "]")
-                    .replace("\\", "")
-                    .replace("'", "\"");
-            CommunicationDTO communicationDTO = objectMapper.readValue(replData, CommunicationDTO.class);
-            String response = objectMapper.writeValueAsString(communicationController.communicate(communicationDTO));
-            kafkaTemplate.send(
-                    TO_EVENT_TOPIC
-                    , key
-                    , response
-            );
-        } catch (Exception exp) {
-            LOGGER.error("KafkaConsumer.listen exception: ", exp);
-        }
-    }
+//    @KafkaListener(id = "KafkaCommunicationListener", topics = "${app.topic.request}", containerFactory = "kafkaListenerContainerFactory")
+//    public void listen(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key, @Payload String data) {
+//        try {
+//            LOGGER.info("key = {}; msg = {}", key, data);
+//            String replData = data
+//                    .replace("\"{", "{")
+//                    .replace("}\"", "}")
+//                    .replace("\"[", "[")
+//                    .replace("]\"", "]")
+//                    .replace("\\", "")
+//                    .replace("'", "\"");
+//            CommunicationDTO communicationDTO = objectMapper.readValue(replData, CommunicationDTO.class);
+//            String response = objectMapper.writeValueAsString(communicationController.communicate(communicationDTO));
+//            kafkaTemplate.send(
+//                    TO_EVENT_TOPIC
+//                    , key
+//                    , response
+//            );
+//        } catch (Exception exp) {
+//            LOGGER.error("KafkaConsumer.listen exception: ", exp);
+//        }
+//    }
 }
