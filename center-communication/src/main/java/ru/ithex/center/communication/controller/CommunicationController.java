@@ -3,6 +3,7 @@ package ru.ithex.center.communication.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 import ru.ithex.baseweb.model.dto.response.ResponseWrapperDTO;
 import ru.ithex.baseweb.model.dto.response.error.BadRequestError;
 import ru.ithex.baseweb.model.dto.response.error.InternalServerError;
@@ -11,7 +12,10 @@ import ru.ithex.center.communication.exception.CommunicationDtoValidationExcepti
 import ru.ithex.center.communication.model.CommunicationDTO;
 import ru.ithex.center.communication.model.mapper.EmailMapper;
 
-@Service
+//@Service
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/communicate")
 public class CommunicationController {
 	private static final Logger log = LoggerFactory.getLogger(CommunicationController.class);
 
@@ -21,7 +25,9 @@ public class CommunicationController {
 		this.emailSenderController = emailSenderController;
 	}
 
-	public ResponseWrapperDTO communicate(CommunicationDTO requestDTO) {
+	@PostMapping("/email")
+	public ResponseWrapperDTO communicate(
+			@RequestBody CommunicationDTO requestDTO) {
 		try {
 			switch (requestDTO.getCode()){
 				case 200:

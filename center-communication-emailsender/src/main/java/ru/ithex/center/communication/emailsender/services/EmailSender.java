@@ -58,7 +58,7 @@ public class EmailSender {
     private String prepareText(EmailTemplate emailTemplate, Map<String, Object> params) throws InputValidationException {
         try {
             params.put("dateMillis",System.currentTimeMillis());
-            String templateString = emailTemplate.getEmailTemplateString();
+            String templateString = emailTemplate.getEmailTemplateText();
             Template template = new Template("templateName", new StringReader(templateString), configuration);
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, params);
         } catch (Exception e) {

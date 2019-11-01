@@ -3,7 +3,7 @@ package ru.ithex.center.communication.emailsender.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "email_template", schema = "mdm")
+@Table(name = "email_template")
 public class EmailTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,8 @@ public class EmailTemplate {
     @Column(name = "email_template_subject", columnDefinition = "[emailTemplateSubject] Тема письма для шаблона email сообщения")
     private String emailTemplateSubject;
 
-    @Column(name = "email_template_string", columnDefinition = "[emailTemplateString] Шаблон письма")
-    private String emailTemplateString;
+    @Column(name = "email_template_text", columnDefinition = "[emailTemplateString] Шаблон письма")
+    private String emailTemplateText;
 
     public Integer getEmailTemplateId() {
         return emailTemplateId;
@@ -54,11 +54,11 @@ public class EmailTemplate {
         this.emailTemplateSubject = emailTemplateSubject;
     }
 
-    public String getEmailTemplateString() {
-        return emailTemplateString;
+    public String getEmailTemplateText() {
+        return emailTemplateText;
     }
 
-    public void setEmailTemplateString(String emailTemplateString) {
-        this.emailTemplateString = emailTemplateString;
+    public void setEmailTemplateText(String emailTemplateText) {
+        this.emailTemplateText = emailTemplateText;
     }
 }
