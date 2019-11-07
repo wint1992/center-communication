@@ -13,11 +13,7 @@ import ru.ithex.center.communication.emailsender.model.entity.EmailTemplate;
 import ru.ithex.center.communication.emailsender.services.dictionaries.EmailTemplateService;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class EmailSender {
@@ -47,7 +43,7 @@ public class EmailSender {
         boolean successfulSending = false;
         int attempt = 0;
         while(!successfulSending && attempt < maxAttemptCount) {
-            successfulSending = emailBaseSender.send(MAIL_FROM, emailDTO.getEmailSubject() != null ? emailDTO.getEmailSubject() : emailTemplate.getEmailTemplateSubject(), mailBody, EmailTypes.HTML, emailDTO.getEmails(), emailDTO.getBcc(), emailDTO.getCopy());
+            successfulSending = emailBaseSender.send(MAIL_FROM, emailDTO.getEmailSubject() != null ? emailDTO.getEmailSubject() : emailTemplate.getEmailTemplateSubject(), mailBody, EmailTypes.HTML, emailDTO.getEmails(), emailDTO.getBcc(), emailDTO.getCopy(), emailDTO.getAttachments());
             attempt++;
         }
         if (!successfulSending)

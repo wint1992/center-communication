@@ -1,21 +1,24 @@
 package ru.ithex.center.communication.model.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.ithex.center.communication.emailsender.exceptions.EmailMappingException;
 import ru.ithex.center.communication.emailsender.model.dto.EmailDTO;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EmailMapper {
     public static EmailDTO map(Map<String, Object> params){
-        EmailDTO emailDTO = new EmailDTO(
-                (Integer) params.get("templateCode"),
-                (String) params.get("emailSubject"),
-                ((List<String>) params.getOrDefault("emails", new ArrayList<>())).stream().filter(in -> in != null && !in.isEmpty()).peek(s -> s.trim()).collect(Collectors.toList()),
-                ((List<String>) params.getOrDefault("copy", new ArrayList<>())).stream().filter(in -> in != null && !in.isEmpty()).peek(s -> s.trim()).collect(Collectors.toList()),
-                ((List<String>) params.getOrDefault("bcc", new ArrayList<>())).stream().filter(in -> in != null && !in.isEmpty()).peek(s -> s.trim()).collect(Collectors.toList())
-        );
+        ObjectMapper objectMapper = new ObjectMapper();
+        EmailDTO emailDTO = null;
+        try {
+            emailDTO = objectMapper.readValue(objectMapper.writeValueAsString(params), EmailDTO.class);
+        } catch (JsonProcessingException e){
+            throw new EmailMappingException("Ошибка преобразования входных параметров", e);
+        } catch (IOException e){
+            throw new EmailMappingException("Ошибка формирования объекта из входных параметров", e);
+        }
         emailDTO.setParams(params);
         return emailDTO;
     }

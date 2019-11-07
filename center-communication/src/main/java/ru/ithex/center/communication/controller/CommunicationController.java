@@ -12,7 +12,7 @@ import ru.ithex.center.communication.exception.CommunicationDtoValidationExcepti
 import ru.ithex.center.communication.model.CommunicationDTO;
 import ru.ithex.center.communication.model.mapper.EmailMapper;
 
-//@Service
+@Service
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/communicate")
