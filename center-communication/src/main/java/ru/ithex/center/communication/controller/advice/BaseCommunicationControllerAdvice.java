@@ -10,9 +10,9 @@ import ru.ithex.baseweb.controller.advice.BaseControllerAdvice;
 import ru.ithex.baseweb.model.dto.response.ResponseWrapperDTO;
 import ru.ithex.baseweb.model.dto.response.error.BadRequestError;
 import ru.ithex.baseweb.model.dto.response.error.InternalServerError;
-import ru.ithex.center.communication.emailsender.exceptions.AttachmentMessagingException;
-import ru.ithex.center.communication.emailsender.exceptions.AttachmentTypeException;
-import ru.ithex.center.communication.emailsender.exceptions.EmailMappingException;
+import ru.ithex.center.communication.emailsender.exception.*;
+import ru.ithex.center.communication.exception.CommunicationDtoValidationException;
+import ru.ithex.center.communication.exception.EmailMappingException;
 
 @RestControllerAdvice
 public class BaseCommunicationControllerAdvice extends BaseControllerAdvice {
@@ -34,9 +34,33 @@ public class BaseCommunicationControllerAdvice extends BaseControllerAdvice {
         return ResponseWrapperDTO.error(new InternalServerError(e.getMessage()));
     }
 
-    @ExceptionHandler(AttachmentTypeException.class)
+    @ExceptionHandler(EmailSenderException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseWrapperDTO baseHandle(EmailSenderException e, HttpRequest request) {
+        return ResponseWrapperDTO.error(new InternalServerError(e.getMessage()));
+    }
+
+    @ExceptionHandler(EmailDtoValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseWrapperDTO baseHandle(AttachmentTypeException e, HttpRequest request) {
+    public ResponseWrapperDTO baseHandle(EmailDtoValidationException e, HttpRequest request) {
         return ResponseWrapperDTO.error(new BadRequestError(e.getMessage()));
+    }
+
+    @ExceptionHandler(CommunicationDtoValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseWrapperDTO baseHandle(CommunicationDtoValidationException e, HttpRequest request) {
+        return ResponseWrapperDTO.error(new BadRequestError(e.getMessage()));
+    }
+
+    @ExceptionHandler(FreeMarkerTemplateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseWrapperDTO baseHandle(FreeMarkerTemplateException e, HttpRequest request) {
+        return ResponseWrapperDTO.error(new BadRequestError(e.getMessage()));
+    }
+
+    @ExceptionHandler(EmailTemplateDataException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseWrapperDTO baseHandle(EmailTemplateDataException e, HttpRequest request) {
+        return ResponseWrapperDTO.error(new InternalServerError(e.getMessage()));
     }
 }

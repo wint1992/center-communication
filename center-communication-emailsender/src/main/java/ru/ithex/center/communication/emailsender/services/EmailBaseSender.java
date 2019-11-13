@@ -2,20 +2,17 @@ package ru.ithex.center.communication.emailsender.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import ru.ithex.center.communication.core.exceptions.InputValidationException;
-import ru.ithex.center.communication.emailsender.exceptions.AttachmentMessagingException;
-import ru.ithex.center.communication.emailsender.exceptions.AttachmentTypeException;
+import ru.ithex.center.communication.emailsender.exception.AttachmentMessagingException;
+import ru.ithex.center.communication.emailsender.exception.EmailSenderException;
 import ru.ithex.center.communication.emailsender.model.Attachment;
 import ru.ithex.center.communication.emailsender.model.EmailTypes;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmailBaseSender {
@@ -27,20 +24,24 @@ public class EmailBaseSender {
         this.javaMailSender = javaMailSender;
     }
 
-    public boolean send(String emailFrom, String subject, String msg, EmailTypes emailType, List<String> _emailTo, List<String> _bccEmailTo, List<String> _copy, List<Attachment> attachments) throws InputValidationException {
-        List<String> emailTo = _emailTo != null ? _emailTo.stream().filter(src -> !src.isEmpty()).map(String::trim).collect(Collectors.toList()) : null;
-        List<String> bccEmailTo = _bccEmailTo != null ? _bccEmailTo.stream().filter(src -> !src.isEmpty()).map(String::trim).collect(Collectors.toList()) : null;
-        List<String> copy = _copy != null ? _copy.stream().filter(src -> !src.isEmpty()).map(String::trim).collect(Collectors.toList()) : null;
+    public boolean send(String emailFrom, String subject, String msg, EmailTypes emailType, List<String> emailTo, List<String> bccEmailTo, List<String> copy, List<Attachment> attachments){
         boolean res = false;
-        if (((emailTo != null && emailTo.size() > 0) || (copy != null && copy.size() > 0) ) && subject != null && msg != null && emailType != null && emailFrom != null)
-            try {
-                validSend(emailTo, bccEmailTo, copy, emailFrom, subject, msg, emailType, attachments);
-                res = true;
-            }
-            catch (MessagingException e){
-                log.error("Email sending to {} error: {}", emailTo, e.getMessage());
-            }
-        else throw new InputValidationException(new IllegalArgumentException(String.format("Incorrect params for sending email: emailTo=%s, subject=%s, msg=%s, emailFrom=%s emailType=text/%s!", emailTo, subject, msg, emailFrom, emailType)));
+
+        if (msg == null)
+            throw new EmailSenderException("Тело письма отсутствует");
+
+        if (emailType == null)
+            throw new EmailSenderException("Не указан тип письма");
+
+        if (emailFrom == null)
+            throw new EmailSenderException("Не указан исходящий email");
+        try {
+            validSend(emailTo, bccEmailTo, copy, emailFrom, subject, msg, emailType, attachments);
+            res = true;
+        }
+        catch (MessagingException e){
+            log.error("Email sending to {} error: {}", emailTo, e.getMessage());
+        }
         return  res;
     }
 
@@ -66,14 +67,10 @@ public class EmailBaseSender {
                     throw new AttachmentMessagingException("Ошибка формирования вложения", e);
                 }
             });
-        helper.setSubject(subject);
+        helper.setSubject(subject == null ? "" : subject);
         helper.setFrom(emailFrom);
         helper.setText(msg,emailType.equals(EmailTypes.HTML));
 
-        try {
-            javaMailSender.send(mimeMessage);
-        } catch (MailSendException e){
-            throw new AttachmentTypeException("Ошибочный типа вложения", e);
-        }
+        javaMailSender.send(mimeMessage);
     }
 }

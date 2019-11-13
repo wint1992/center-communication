@@ -1,4 +1,3 @@
 include 'center-communication'
 include 'center-communication-emailsender'
-include 'center-communication-core'
 include 'base-web'

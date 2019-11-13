@@ -1,4 +1,4 @@
-package ru.ithex.center.communication.emailsender.repositories.dictionaries;
+package ru.ithex.center.communication.emailsender.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.ithex.center.communication.emailsender.model.entity.EmailTemplate;

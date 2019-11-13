@@ -13,7 +13,6 @@ repositories {
 
 dependencies {
     compile project(':base-web')
-    compile project(':center-communication-core')
     implementation 'org.springframework.boot:spring-boot-starter-mail:2.1.6.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker:2.1.6.RELEASE'
     implementation 'org.springframework.data:spring-data-jpa:2.1.9.RELEASE'

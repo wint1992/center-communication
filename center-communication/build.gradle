@@ -23,5 +23,4 @@ dependencies {
     implementation('org.springframework.kafka:spring-kafka')
     compile project(':base-web')
     compile project(':center-communication-emailsender')
-    compile project(':center-communication-core')
 }

@@ -2,7 +2,7 @@ package ru.ithex.center.communication.model.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.ithex.center.communication.emailsender.exceptions.EmailMappingException;
+import ru.ithex.center.communication.exception.EmailMappingException;
 import ru.ithex.center.communication.emailsender.model.dto.EmailDTO;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ public class EmailMapper {
         } catch (IOException e){
             throw new EmailMappingException("Ошибка формирования объекта из входных параметров", e);
         }
-        emailDTO.setParams(params);
         return emailDTO;
     }
 }

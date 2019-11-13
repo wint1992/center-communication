@@ -2,13 +2,15 @@ package ru.ithex.center.communication.emailsender.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.ithex.baseweb.model.Validation;
+import ru.ithex.center.communication.emailsender.exception.EmailDtoValidationException;
 import ru.ithex.center.communication.emailsender.model.Attachment;
 
 import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmailDTO {
+public class EmailDTO implements Validation {
     @JsonProperty("templateCode")
     private final Integer templateCode;
 
@@ -27,7 +29,8 @@ public class EmailDTO {
     @JsonProperty("attachments")
     private final List<Attachment> attachments;
 
-    private Map<String, Object> params;
+    @JsonProperty("emailParams")
+    private final Map<String, Object> emailParams;
 
     public EmailDTO(
             @JsonProperty("templateCode") Integer templateCode,
@@ -35,13 +38,15 @@ public class EmailDTO {
             @JsonProperty("emails") List<String> emails,
             @JsonProperty("copy") List<String> copy,
             @JsonProperty("bcc") List<String> bcc,
-            @JsonProperty("attachments") List<Attachment> attachments) {
+            @JsonProperty("attachments") List<Attachment> attachments,
+            @JsonProperty("emailParams") Map<String, Object> emailParams) {
         this.templateCode = templateCode;
         this.emailSubject = emailSubject;
         this.emails = emails;
         this.copy = copy;
         this.bcc = bcc;
         this.attachments = attachments;
+        this.emailParams = emailParams;
     }
 
     public Integer getTemplateCode() {
@@ -64,15 +69,33 @@ public class EmailDTO {
         return bcc;
     }
 
-    public Map<String, Object> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
+    public Map<String, Object> getEmailParams() {
+        return emailParams;
     }
 
     public List<Attachment> getAttachments() {
         return attachments;
+    }
+
+    @Override
+    public void validate() {
+        if (templateCode == null)
+            throw new EmailDtoValidationException("Параметр 'templateCode' обязателен!");
+
+        checkEmails(emails);
+        checkEmails(copy);
+        checkEmails(bcc);
+
+        if ((emails == null || emails.size() == 0) && (copy == null || copy.size() == 0))
+            throw new EmailDtoValidationException("Кому(emails) или Копия(copy) должны быть заполнены");
+    }
+
+    private void checkEmails(List<String> emails){
+        if (emails != null)
+            for (String src: emails) {
+                src = src.trim();
+                if (src.isEmpty())
+                    emails.remove(src);
+            }
     }
 }

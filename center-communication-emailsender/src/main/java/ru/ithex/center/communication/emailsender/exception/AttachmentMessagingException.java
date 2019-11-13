@@ -1,4 +1,4 @@
-package ru.ithex.center.communication.emailsender.exceptions;
+package ru.ithex.center.communication.emailsender.exception;
 
 public class AttachmentMessagingException extends RuntimeException {
     public AttachmentMessagingException(String msg, Throwable cause) {
