@@ -20,16 +20,16 @@ public class CommunicationController {
 
 	@PostMapping()
 	public void communicate(
-			@RequestBody CommunicationDTO requestDTO) {
-		switch (requestDTO.getCode()){
+			@RequestBody CommunicationDTO communication) {
+		switch (communication.getCode()){
 			case 200:
-				sendEmail(EmailMapper.map(requestDTO.getParams()));
+				sendEmail(EmailMapper.map(communication.getParams()));
 		}
 	}
 
-	@PostMapping("/email")
+	@PostMapping("/sendEmail")
 	public void sendEmail(
-			@RequestBody EmailDTO requestDTO) {
-		emailSenderController.sender(requestDTO);
+			@RequestBody EmailDTO email) {
+		emailSenderController.sender(email);
 	}
 }
