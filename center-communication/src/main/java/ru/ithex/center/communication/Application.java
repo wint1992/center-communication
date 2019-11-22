@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ComponentScan({"ru.ithex.center.communication", "ru.ithex.center.communication.emailsender", "ru.ithex.baseweb"})
-@EntityScan({"ru.ithex.center.communication", "ru.ithex.center.communication.emailsender"})
+@EntityScan({"ru.ithex.center.communication.emailsender"})
 @EnableJpaRepositories({"ru.ithex.center.communication.emailsender"})
 @EnableScheduling
 public class Application {

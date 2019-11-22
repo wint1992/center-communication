@@ -34,6 +34,6 @@ public class CommunicationDTO implements Validation {
     @Override
     public void validate(){
         if (code == null)
-            throw new CommunicationDtoValidationException("Incorrect input params: code is required");
+            throw new CommunicationDtoValidationException("Параметр 'code' обязателен!");
     }
 }
